@@ -1,0 +1,54 @@
+# Config for LevelingPluginSMP
+max_stat: 3
+drop_on_death_if_has_stat: true
+
+abilities:
+  ground_slam:
+    cooldown: 20
+    damage_hearts: 4  # true damage hearts (will apply directly for simplicity)
+    particle: EXPLOSION_NORMAL
+  dash:
+    cooldown: 10
+    distance: 6
+    particle: CLOUD
+  vitality_surge:
+    cooldown: 60
+    extra_absorption: 5
+    regen_seconds: 2
+    particle: VILLAGER_HAPPY
+
+weapon_abilities:
+  sword:
+    cooldown: 30
+    duration_seconds: 8
+    attack_speed_bonus: 0.7
+  axe:
+    cooldown: 30
+    duration_seconds: 8
+    haste_level: 3
+  trident:
+    cooldown: 30
+    duration_seconds: 12
+    lifesteal_percent: 0.25
+
+recipes:
+  stat_point:
+    shape:
+      - " G "
+      - "GBG"
+      - " G "
+    key:
+      G: GOLD_INGOT
+      B: BLAZE_POWDER
+  reset_token:
+    shape:
+      - " R "
+      - "RCR"
+      - " R "
+    key:
+      R: REDSTONE
+      C: NETHER_STAR
+
+gui:
+  title: "Leveling"
+  size: 27
