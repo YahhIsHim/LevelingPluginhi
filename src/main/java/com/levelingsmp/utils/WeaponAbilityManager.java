@@ -59,7 +59,7 @@ public class WeaponAbilityManager {
         long dur = plugin.getConfig().getLong("weapon_abilities.axe.duration_seconds", 8);
         axeEnd.put(p.getUniqueId(), now() + dur*1000);
         int haste = plugin.getConfig().getInt("weapon_abilities.axe.haste_level", 3);
-        p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, (int)dur*20, haste-1));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, (int)dur*20, haste-1));
         p.sendMessage("Axe ability active: haste for " + dur + "s");
     }
 
