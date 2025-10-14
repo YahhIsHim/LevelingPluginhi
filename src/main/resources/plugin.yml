@@ -1,29 +1,14 @@
 name: LevelingPluginSMP
-main: com.levelingsmp.LevelingPluginSMP
+main: com.levelingplugin.LevelingPluginSMP
 version: 1.0.0
-api-version: "1.21"
-author: Assistant
-description: Leveling system: ground slam, dash, vitality, stat points and custom weapons.
+api-version: 1.21
+author: PurpOwnsYahh
+description: "Leveling system with agility, strength, and vitality. Includes dash, ground slam, custom weapons, and stat reset item."
+
 commands:
   leveling:
-    description: Open leveling GUI
-    usage: /leveling
+    description: Opens the leveling GUI
+    usage: /<command>
   levelinggive:
-    description: Give items for testing (OP only)
-    usage: /levelinggive
-  ability1:
-    description: Activate strength ability (ground slam) - stat
-  ability2:
-    description: Activate speed ability (dash) - stat
-  ability3:
-    description: Activate vitality ability - stat
-  ability4:
-    description: Weapon ability: strength sword
-  ability5:
-    description: Weapon ability: speed axe
-  ability6:
-    description: Weapon ability: vitality trident
-permissions:
-  levelingplugin.use:
-    description: Open leveling GUI
-    default: true
+    description: Gives a leveling item
+    usage: /<command> <item>
