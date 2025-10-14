@@ -38,7 +38,7 @@ public class StatAbilityManager {
         groundSlamCd.put(p.getUniqueId(), now());
         int damageHearts = plugin.getConfig().getInt("abilities.ground_slam.damage_hearts",4);
         // play effect
-        p.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, p.getLocation(), 2);
+        p.getWorld().spawnParticle(Particle.EXPLOSION, p.getLocation(), 2);
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f);
         // damage nearby entities for fixed 'damageHearts' hearts
         Location loc = p.getLocation();
@@ -87,7 +87,7 @@ public class StatAbilityManager {
         int regenSec = plugin.getConfig().getInt("abilities.vitality_surge.regen_seconds", 2);
         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, regenSec*20, 1));
         p.setAbsorptionAmount(extraAbs * 2.0f);
-        p.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, p.getLocation(), 20);
+        p.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, p.getLocation(), 20);
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
         p.sendMessage("Vitality Surge activated!");
     }
