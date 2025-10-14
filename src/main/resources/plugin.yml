@@ -1,5 +1,5 @@
 name: LevelingPluginSMP
-main: com.levelingplugin.LevelingPluginSMP
+main: com.levelingsmp.LevelingPluginSMP
 version: 1.0.0
 api-version: 1.21
 author: PurpOwnsYahh
@@ -9,6 +9,31 @@ commands:
   leveling:
     description: Opens the leveling GUI
     usage: /<command>
+
   levelinggive:
     description: Gives a leveling item
     usage: /<command> <item>
+
+  ability1:
+    description: Activates Agility Dash ability
+    usage: /<command>
+
+  ability2:
+    description: Activates Speed ability (extra boost)
+    usage: /<command>
+
+  ability3:
+    description: Activates Vitality ability (temporary hearts and regen)
+    usage: /<command>
+
+  ability4:
+    description: Activates Strength Sword ability (auto-crit)
+    usage: /<command>
+
+  ability5:
+    description: Activates Speed Axe ability (Haste 3)
+    usage: /<command>
+
+  ability6:
+    description: Activates Vitality Trident ability (Regen on hit)
+    usage: /<command>
