@@ -42,10 +42,10 @@ public class ItemFactory {
         ItemMeta m = s.getItemMeta();
         m.setDisplayName("§cStrength Sword");
         m.setLore(Arrays.asList("A powerful sword - grants ability when used."));
-        m.addEnchant(org.bukkit.enchantments.Enchantment.DAMAGE_ALL, 5, true);
+        m.addEnchant(org.bukkit.enchantments.Enchantment.SHARPNESS, 5, true);
         m.addEnchant(org.bukkit.enchantments.Enchantment.SWEEPING_EDGE, 3, true);
         m.addEnchant(org.bukkit.enchantments.Enchantment.FIRE_ASPECT, 2, true);
-        m.addEnchant(org.bukkit.enchantments.Enchantment.LOOT_BONUS_MOBS, 3, true);
+        m.addEnchant(org.bukkit.enchantments.Enchantment.LOOTING, 3, true);
         m.setUnbreakable(true);
         s.setItemMeta(m);
         return s;
@@ -56,8 +56,8 @@ public class ItemFactory {
         ItemMeta m = s.getItemMeta();
         m.setDisplayName("§6Speed Axe");
         m.setLore(Arrays.asList("Gives attack speed boost ability."));
-        m.addEnchant(org.bukkit.enchantments.Enchantment.DIG_SPEED, 5, true);
-        m.addEnchant(org.bukkit.enchantments.Enchantment.DAMAGE_ALL, 4, true);
+        m.addEnchant(org.bukkit.enchantments.Enchantment.EFFICIENCY, 5, true);
+        m.addEnchant(org.bukkit.enchantments.Enchantment.SHARPNESS, 5, true);
         m.setUnbreakable(true);
         s.setItemMeta(m);
         return s;
@@ -68,7 +68,7 @@ public class ItemFactory {
         ItemMeta m = s.getItemMeta();
         m.setDisplayName("§aVitality Trident");
         m.setLore(Arrays.asList("Grants lifesteal ability when active."));
-        m.addEnchant(org.bukkit.enchantments.Enchantment.DAMAGE_ALL, 4, true);
+        m.addEnchant(org.bukkit.enchantments.Enchantment.SHARPNESS, 5, true);
         m.addEnchant(org.bukkit.enchantments.Enchantment.LOYALTY, 3, true);
         m.setUnbreakable(true);
         s.setItemMeta(m);
