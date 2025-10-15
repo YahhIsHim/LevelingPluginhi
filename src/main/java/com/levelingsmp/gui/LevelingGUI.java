@@ -1,133 +1,73 @@
 package com.levelingsmp.gui;
 
-import com.levelingsmp.LevelingPluginSMP;
 import com.levelingsmp.utils.ItemFactory;
 import com.levelingsmp.utils.StatManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class LevelingGUI implements Listener {
+import java.util.ArrayList;
+import java.util.List;
 
-    private static LevelingPluginSMP plugin;
-    private static StatManager statManager;
-    private static ItemFactory itemFactory;
+public class LevelingGUI {
 
-    public LevelingGUI(LevelingPluginSMP instance, StatManager sm, ItemFactory itf) {
-        plugin = instance;
-        statManager = sm;
-        itemFactory = itf;
+    public static final String GUI_TITLE = "§8Player Leveling";
+
+    public static void open(Player player, StatManager statManager) {
+        Inventory inv = Bukkit.createInventory(null, 27, GUI_TITLE);
+
+        int strength = statManager.getStat(player, "strength");
+        int speed = statManager.getStat(player, "speed");
+        int vitality = statManager.getStat(player, "vitality");
+        int points = statManager.getStatPoints(player);
+
+        inv.setItem(11, createStatItem(Material.NETHERITE_SWORD, "§cStrength", strength,
+                "§7Increases attack power.",
+                "§eAbility: Ground Slam"));
+
+        inv.setItem(13, createStatItem(Material.NETHERITE_AXE, "§bAgility", speed,
+                "§7Increases movement speed.",
+                "§eAbility: Dash"));
+
+        inv.setItem(15, createStatItem(Material.TRIDENT, "§aVitality", vitality,
+                "§7Increases health and grants regen.",
+                "§eAbility: Survival Burst"));
+
+        inv.setItem(22, createInfoItem(points));
+
+        player.openInventory(inv);
     }
 
-    public static void open(Player p) {
-        int size = plugin.getConfig().getInt("gui.size", 27);
-        String title = plugin.getConfig().getString("gui.title", "Leveling");
-        Inventory inv = Bukkit.createInventory(null, size, title);
+    private static ItemStack createStatItem(Material material, String name, int level, String... loreLines) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return item;
 
-        // Strength slot
-        ItemStack strength = new ItemStack(Material.NETHERITE_SWORD);
-        ItemMeta sm = strength.getItemMeta();
-        sm.setDisplayName("§cStrength");
-        sm.setLore(java.util.List.of("Level: " + statManager.getStrength(p) + "/" + plugin.getConfig().getInt("max_stat", 3),
-                "Click to spend 1 point"));
-        strength.setItemMeta(sm);
-
-        // Speed slot
-        ItemStack speed = new ItemStack(Material.NETHERITE_BOOTS);
-        ItemMeta spm = speed.getItemMeta();
-        spm.setDisplayName("§6Speed");
-        spm.setLore(java.util.List.of("Level: " + statManager.getSpeed(p) + "/" + plugin.getConfig().getInt("max_stat", 3),
-                "Click to spend 1 point"));
-        speed.setItemMeta(spm);
-
-        // Vitality slot
-        ItemStack vit = new ItemStack(Material.APPLE);
-        ItemMeta vm = vit.getItemMeta();
-        vm.setDisplayName("§aVitality");
-        vm.setLore(java.util.List.of("Level: " + statManager.getVitality(p) + "/" + plugin.getConfig().getInt("max_stat", 3),
-                "Click to spend 1 point"));
-        vit.setItemMeta(vm);
-
-        inv.setItem(11, strength);
-        inv.setItem(13, speed);
-        inv.setItem(15, vit);
-
-        // Info and statpoint display
-        ItemStack statPoint = itemFactory.createStatPoint();
-        ItemMeta pm = statPoint.getItemMeta();
-        pm.setDisplayName("§eYou have §6" + statManager.getStatPoints(p) + " §epoints");
-        statPoint.setItemMeta(pm);
-        inv.setItem(4, statPoint);
-
-        p.openInventory(inv);
+        meta.setDisplayName(name + " §7(§e" + level + "§7)");
+        List<String> lore = new ArrayList<>();
+        for (String line : loreLines) lore.add(line);
+        lore.add("");
+        lore.add("§7Click to upgrade §f(§e1 point§f)");
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        if (!(e.getWhoClicked() instanceof Player p)) return;
-        if (e.getView().getTitle().equals(plugin.getConfig().getString("gui.title", "Leveling"))) {
-            e.setCancelled(true); // prevent moving items
-            int slot = e.getRawSlot();
-            if (slot == 11) {
-                // Strength
-                if (statManager.getStatPoints(p) <= 0) {
-                    p.sendMessage("You have no stat points.");
-                    return;
-                }
-                if (statManager.getStrength(p) >= plugin.getConfig().getInt("max_stat", 3)) {
-                    p.sendMessage("Strength is maxed.");
-                    return;
-                }
-                statManager.addStrength(p,1);
-                p.sendMessage("Added +1 Strength.");
-                statManager.save();
-                open(p);
-            } else if (slot == 13) {
-                if (statManager.getStatPoints(p) <= 0) {
-                    p.sendMessage("You have no stat points.");
-                    return;
-                }
-                if (statManager.getSpeed(p) >= plugin.getConfig().getInt("max_stat", 3)) {
-                    p.sendMessage("Speed is maxed.");
-                    return;
-                }
-                statManager.addSpeed(p,1);
-                p.sendMessage("Added +1 Speed.");
-                statManager.save();
-                open(p);
-            } else if (slot == 15) {
-                if (statManager.getStatPoints(p) <= 0) {
-                    p.sendMessage("You have no stat points.");
-                    return;
-                }
-                if (statManager.getVitality(p) >= plugin.getConfig().getInt("max_stat", 3)) {
-                    p.sendMessage("Vitality is maxed.");
-                    return;
-                }
-                statManager.addVitality(p,1);
-                p.sendMessage("Added +1 Vitality.");
-                statManager.save();
-                open(p);
-            }
-        }
-    }
+    private static ItemStack createInfoItem(int points) {
+        ItemStack item = new ItemStack(Material.EXPERIENCE_BOTTLE);
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return item;
 
-    // Prevent taking items by drag etc
-    @EventHandler
-    public void onInventoryDrag(InventoryDragEvent e) {
-        if (e.getView().getTitle().equals(plugin.getConfig().getString("gui.title", "Leveling"))) {
-            e.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onClose(InventoryCloseEvent e) {
-        // nothing
+        meta.setDisplayName("§6Your Stats");
+        List<String> lore = new ArrayList<>();
+        lore.add("§7You have §e" + points + " §7unspent stat points.");
+        lore.add("");
+        lore.add("§fEach upgrade enhances your power.");
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 }
