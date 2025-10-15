@@ -1,115 +1,78 @@
-package com.levelingsmp.utils;
+package com.levelingsmp.managers;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
-import java.io.File;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 public class StatManager {
 
-    private final File dataFile;
-    private final FileConfiguration data;
+    private final Map<UUID, PlayerStats> data = new HashMap<>();
+    private final Random random = new Random();
 
-    public StatManager(File dataFolder) {
-        this.dataFile = new File(dataFolder, "data.yml");
-        if (!dataFile.exists()) {
-            try {
-                dataFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        this.data = YamlConfiguration.loadConfiguration(dataFile);
+    public void ensurePlayerData(Player player) {
+        data.computeIfAbsent(player.getUniqueId(), k -> new PlayerStats());
     }
 
-    public void save() {
-        try {
-            data.save(dataFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public PlayerStats getStats(Player player) {
+        ensurePlayerData(player);
+        return data.get(player.getUniqueId());
     }
 
-    // -----------------------------
-    //     PLAYER STAT FUNCTIONS
-    // -----------------------------
-
-    public void createPlayerData(Player player) {
-        UUID uuid = player.getUniqueId();
-        if (!data.contains("players." + uuid)) {
-            data.set("players." + uuid + ".strength", 0);
-            data.set("players." + uuid + ".speed", 0);
-            data.set("players." + uuid + ".vitality", 0);
-            data.set("players." + uuid + ".points", 0);
-            save();
-        }
+    public int getStrength(Player player) {
+        return getStats(player).getStrength();
     }
 
-    public int getStat(Player player, String stat) {
-        UUID uuid = player.getUniqueId();
-        return data.getInt("players." + uuid + "." + stat, 0);
+    public int getSpeed(Player player) {
+        return getStats(player).getSpeed();
     }
 
-    public void setStat(Player player, String stat, int value) {
-        UUID uuid = player.getUniqueId();
-        data.set("players." + uuid + "." + stat, value);
-        save();
+    public int getVitality(Player player) {
+        return getStats(player).getVitality();
     }
 
-    public int getStatPoints(Player player) {
-        UUID uuid = player.getUniqueId();
-        return data.getInt("players." + uuid + ".points", 0);
+    public void addStrength(Player player, int amount) {
+        getStats(player).addStrength(amount);
     }
 
-    public void setStatPoints(Player player, int points) {
-        UUID uuid = player.getUniqueId();
-        data.set("players." + uuid + ".points", points);
-        save();
+    public void addSpeed(Player player, int amount) {
+        getStats(player).addSpeed(amount);
     }
 
-    public void addStatPoint(Player player) {
-        setStatPoints(player, getStatPoints(player) + 1);
+    public void addVitality(Player player, int amount) {
+        getStats(player).addVitality(amount);
     }
 
-    public void removeStatPoint(Player player) {
-        setStatPoints(player, Math.max(0, getStatPoints(player) - 1));
-    }
+    public void removePointOnDeath(Player player) {
+        PlayerStats stats = getStats(player);
+        int total = stats.getStrength() + stats.getSpeed() + stats.getVitality();
+        if (total <= 0) return;
 
-    public void increaseStat(Player player, String stat) {
-        int current = getStat(player, stat);
-        int points = getStatPoints(player);
-
-        if (points > 0) {
-            setStat(player, stat, current + 1);
-            removeStatPoint(player);
+        int rand = random.nextInt(total);
+        if (rand < stats.getStrength() && stats.getStrength() > 0) {
+            stats.addStrength(-1);
+        } else if (rand < stats.getStrength() + stats.getSpeed() && stats.getSpeed() > 0) {
+            stats.addSpeed(-1);
+        } else if (stats.getVitality() > 0) {
+            stats.addVitality(-1);
         }
     }
 
-    // -----------------------------
-    //     SKILL DROP ON DEATH
-    // -----------------------------
+    public int totalInvested(Player player) {
+        PlayerStats stats = getStats(player);
+        return stats.getStrength() + stats.getSpeed() + stats.getVitality();
+    }
 
-    public boolean dropSkillPoint(Player player) {
-        UUID uuid = player.getUniqueId();
-        int strength = getStat(player, "strength");
-        int speed = getStat(player, "speed");
-        int vitality = getStat(player, "vitality");
+    // Optional if you track skill points separately
+    public void addSkillPoint(Player player) {
+        getStats(player).addSkillPoint(1);
+    }
 
-        if (strength + speed + vitality <= 0) {
-            return false; // No stats → no drop
-        }
-
-        // randomly remove one stat
-        String[] stats = {"strength", "speed", "vitality"};
-        String random = stats[(int) (Math.random() * stats.length)];
-
-        int statValue = getStat(player, random);
-        if (statValue > 0) {
-            setStat(player, random, statValue - 1);
-            save();
+    public boolean removeSkillPoint(Player player) {
+        PlayerStats stats = getStats(player);
+        if (stats.getSkillPoints() > 0) {
+            stats.addSkillPoint(-1);
             return true;
         }
         return false;
