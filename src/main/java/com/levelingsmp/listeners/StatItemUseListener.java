@@ -1,7 +1,7 @@
 package com.levelingsmp.listeners;
 
 import com.levelingsmp.LevelingPluginSMP;
-import com.levelingsmp.utils.GUIManager;
+import com.levelingsmp.gui.LevelingGUI;
 import com.levelingsmp.utils.ItemFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
