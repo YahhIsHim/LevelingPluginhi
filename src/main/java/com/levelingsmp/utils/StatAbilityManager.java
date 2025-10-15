@@ -2,6 +2,7 @@ package com.levelingsmp.utils;
 
 import com.levelingsmp.LevelingPluginSMP;
 import org.bukkit.*;
+import com.levelingsmp.managers.StatManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
