@@ -3,84 +3,69 @@ package com.levelingsmp.managers;
 import java.util.UUID;
 
 public class PlayerStats {
-
-    private final UUID uuid;
+    private final UUID playerId;
     private int strength;
-    private int agility;
+    private int speed;
     private int vitality;
-    private int statPoints;
+    private int skillPoints;
 
-    public PlayerStats(UUID uuid) {
-        this.uuid = uuid;
+    public PlayerStats(UUID playerId) {
+        this.playerId = playerId;
         this.strength = 0;
-        this.agility = 0;
+        this.speed = 0;
         this.vitality = 0;
-        this.statPoints = 0;
+        this.skillPoints = 0;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID getPlayerId() {
+        return playerId;
     }
 
     public int getStrength() {
         return strength;
     }
 
-    public void setStrength(int strength) {
-        this.strength = Math.max(strength, 0);
-    }
-
-    public int getAgility() {
-        return agility;
-    }
-
-    public void setAgility(int agility) {
-        this.agility = Math.max(agility, 0);
+    public int getSpeed() {
+        return speed;
     }
 
     public int getVitality() {
         return vitality;
     }
 
-    public void setVitality(int vitality) {
-        this.vitality = Math.max(vitality, 0);
+    public int getSkillPoints() {
+        return skillPoints;
     }
 
-    public int getStatPoints() {
-        return statPoints;
+    public void addStrength(int amount) {
+        this.strength += amount;
     }
 
-    public void setStatPoints(int statPoints) {
-        this.statPoints = Math.max(statPoints, 0);
+    public void addSpeed(int amount) {
+        this.speed += amount;
     }
 
-    public void addStatPoint() {
-        this.statPoints++;
+    public void addVitality(int amount) {
+        this.vitality += amount;
     }
 
-    public boolean spendStatPoint() {
-        if (statPoints > 0) {
-            statPoints--;
-            return true;
-        }
-        return false;
+    public void addSkillPoint(int amount) {
+        this.skillPoints += amount;
     }
 
-    public void resetStats() {
-        this.strength = 0;
-        this.agility = 0;
-        this.vitality = 0;
-        this.statPoints = 0;
+    public void setStrength(int value) {
+        this.strength = value;
     }
 
-    @Override
-    public String toString() {
-        return "PlayerStats{" +
-                "uuid=" + uuid +
-                ", strength=" + strength +
-                ", agility=" + agility +
-                ", vitality=" + vitality +
-                ", statPoints=" + statPoints +
-                '}';
+    public void setSpeed(int value) {
+        this.speed = value;
+    }
+
+    public void setVitality(int value) {
+        this.vitality = value;
+    }
+
+    public void setSkillPoints(int value) {
+        this.skillPoints = value;
     }
 }
