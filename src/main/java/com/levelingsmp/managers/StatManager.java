@@ -1,80 +1,51 @@
 package com.levelingsmp.managers;
 
 import org.bukkit.entity.Player;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 public class StatManager {
+    private final Map<UUID, PlayerStats> statsMap = new HashMap<>();
 
-    private final Map<UUID, PlayerStats> data = new HashMap<>();
-    private final Random random = new Random();
-
-    public void ensurePlayerData(Player player) {
-        data.computeIfAbsent(player.getUniqueId(), k -> new PlayerStats());
+    public PlayerStats getPlayerStats(Player player) {
+        return statsMap.computeIfAbsent(player.getUniqueId(), id -> new PlayerStats(id));
     }
 
-    public PlayerStats getStats(Player player) {
-        ensurePlayerData(player);
-        return data.get(player.getUniqueId());
-    }
-
-    public int getStrength(Player player) {
-        return getStats(player).getStrength();
-    }
-
-    public int getSpeed(Player player) {
-        return getStats(player).getSpeed();
-    }
-
-    public int getVitality(Player player) {
-        return getStats(player).getVitality();
-    }
-
-    public void addStrength(Player player, int amount) {
-        getStats(player).addStrength(amount);
-    }
-
-    public void addSpeed(Player player, int amount) {
-        getStats(player).addSpeed(amount);
-    }
-
-    public void addVitality(Player player, int amount) {
-        getStats(player).addVitality(amount);
-    }
-
-    public void removePointOnDeath(Player player) {
-        PlayerStats stats = getStats(player);
-        int total = stats.getStrength() + stats.getSpeed() + stats.getVitality();
-        if (total <= 0) return;
-
-        int rand = random.nextInt(total);
-        if (rand < stats.getStrength() && stats.getStrength() > 0) {
-            stats.addStrength(-1);
-        } else if (rand < stats.getStrength() + stats.getSpeed() && stats.getSpeed() > 0) {
-            stats.addSpeed(-1);
-        } else if (stats.getVitality() > 0) {
-            stats.addVitality(-1);
+    public int getStat(Player player, String statName) {
+        PlayerStats stats = getPlayerStats(player);
+        switch (statName.toLowerCase()) {
+            case "strength": return stats.getStrength();
+            case "speed": return stats.getSpeed();
+            case "vitality": return stats.getVitality();
+            default: return 0;
         }
     }
 
-    public int totalInvested(Player player) {
-        PlayerStats stats = getStats(player);
-        return stats.getStrength() + stats.getSpeed() + stats.getVitality();
+    public int getStatPoints(Player player) {
+        return getPlayerStats(player).getSkillPoints();
     }
 
-    // Optional if you track skill points separately
-    public void addSkillPoint(Player player) {
-        getStats(player).addSkillPoint(1);
-    }
-
-    public boolean removeSkillPoint(Player player) {
-        PlayerStats stats = getStats(player);
-        if (stats.getSkillPoints() > 0) {
-            stats.addSkillPoint(-1);
-            return true;
+    public void addStat(Player player, String statName, int amount) {
+        PlayerStats stats = getPlayerStats(player);
+        switch (statName.toLowerCase()) {
+            case "strength": stats.addStrength(amount); break;
+            case "speed": stats.addSpeed(amount); break;
+            case "vitality": stats.addVitality(amount); break;
         }
-        return false;
+    }
+
+    public void addSkillPoint(Player player, int amount) {
+        PlayerStats stats = getPlayerStats(player);
+        stats.addSkillPoint(amount);
+    }
+
+    public void resetStats(Player player) {
+        PlayerStats stats = getPlayerStats(player);
+        stats.setStrength(0);
+        stats.setSpeed(0);
+        stats.setVitality(0);
+        stats.setSkillPoints(0);
     }
 }
