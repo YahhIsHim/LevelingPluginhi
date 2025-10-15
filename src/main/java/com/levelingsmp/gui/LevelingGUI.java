@@ -1,7 +1,7 @@
 package com.levelingsmp.gui;
 
 import com.levelingsmp.utils.ItemFactory;
-import com.levelingsmp.utils.StatManager;
+import com.levelingsmp.managers.StatManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
