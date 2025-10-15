@@ -3,7 +3,7 @@ package com.levelingsmp.commands;
 import com.levelingsmp.LevelingPluginSMP;
 import com.levelingsmp.gui.LevelingGUI;
 import com.levelingsmp.utils.ItemFactory;
-import com.levelingsmp.utils.StatManager;
+import com.levelingsmp.managers.StatManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
