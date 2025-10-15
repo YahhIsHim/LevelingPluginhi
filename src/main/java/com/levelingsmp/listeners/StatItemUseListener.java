@@ -1,35 +1,32 @@
 package com.levelingsmp.listeners;
 
-import com.levelingsmp.LevelingPluginSMP;
-import com.levelingsmp.gui.LevelingGUI;
-import com.levelingsmp.utils.ItemFactory;
+import com.levelingsmp.gui.GUIManager;
+import com.levelingsmp.utils.ItemManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 
 public class StatItemUseListener implements Listener {
+    private final GUIManager guiManager;
+
+    public StatItemUseListener(GUIManager guiManager) {
+        this.guiManager = guiManager;
+    }
 
     @EventHandler
-    public void onPlayerUse(PlayerInteractEvent event) {
-        if (event.getHand() != EquipmentSlot.HAND) return;
+    public void onUse(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        ItemStack item = event.getItem();
-        if (item == null) return;
+        if (event.getItem() == null) return;
 
-        // Stat point item opens GUI
-        if (ItemFactory.isStatPoint(item)) {
+        if (ItemManager.isStatPoint(event.getItem())) {
+            guiManager.openLevelingGUI(player);
             event.setCancelled(true);
-            GUIManager.openLevelingGUI(player);
         }
 
-        // Reset token resets stats
-        if (ItemFactory.isResetToken(item)) {
+        if (ItemManager.isResetToken(event.getItem())) {
+            guiManager.openLevelingGUI(player);
             event.setCancelled(true);
-            GUIManager.resetStats(player);
-            player.sendMessage("§cAll your stats have been reset!");
         }
     }
 }
