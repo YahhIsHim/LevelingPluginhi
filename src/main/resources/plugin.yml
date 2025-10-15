@@ -3,37 +3,43 @@ main: com.levelingsmp.LevelingPluginSMP
 version: 1.0.0
 api-version: 1.21
 author: PurpOwnsYahh
-description: "Leveling system with agility, strength, and vitality. Includes dash, ground slam, custom weapons, and stat reset item."
+description: >
+  Custom leveling system with agility, strength, and vitality stats.
+  Includes dash, ground slam, vitality buff, custom weapons, and stat reset item.
 
 commands:
   leveling:
     description: Opens the leveling GUI
     usage: /<command>
-
+    permission: levelingplugin.use
   levelinggive:
     description: Gives a leveling item
     usage: /<command> <item>
-
+    permission: levelingplugin.admin
   ability1:
-    description: Activates Agility Dash ability
+    description: Activates Agility (Speed) ability - Dash
     usage: /<command>
-
+    permission: levelingplugin.ability
   ability2:
-    description: Activates Speed ability (extra boost)
+    description: Activates Strength ability - Ground Slam
     usage: /<command>
-
+    permission: levelingplugin.ability
   ability3:
-    description: Activates Vitality ability (temporary hearts and regen)
+    description: Activates Vitality ability - Regen Boost
     usage: /<command>
-
+    permission: levelingplugin.ability
   ability4:
-    description: Activates Strength Sword ability (auto-crit)
+    description: Activates Weapon ability - Auto Crit or Regen
     usage: /<command>
+    permission: levelingplugin.ability
 
-  ability5:
-    description: Activates Speed Axe ability (Haste 3)
-    usage: /<command>
-
-  ability6:
-    description: Activates Vitality Trident ability (Regen on hit)
-    usage: /<command>
+permissions:
+  levelingplugin.use:
+    description: Allows use of the leveling GUI and basic features
+    default: true
+  levelingplugin.admin:
+    description: Allows admin commands such as /levelinggive
+    default: op
+  levelingplugin.ability:
+    description: Allows activation of stat abilities
+    default: true
