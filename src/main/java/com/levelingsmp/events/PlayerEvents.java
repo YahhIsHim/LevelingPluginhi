@@ -3,7 +3,7 @@ package com.levelingsmp.events;
 import com.levelingsmp.LevelingPluginSMP;
 import com.levelingsmp.utils.ItemFactory;
 import com.levelingsmp.utils.StatAbilityManager;
-import com.levelingsmp.utils.StatManager;
+import com.levelingsmp.managers.StatManager;
 import com.levelingsmp.utils.WeaponAbilityManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
