@@ -1,66 +1,44 @@
 package com.levelingsmp;
 
-import com.levelingsmp.commands.*;
-import com.levelingsmp.events.PlayerEvents;
-import com.levelingsmp.gui.LevelingGUI;
-import com.levelingsmp.utils.ItemFactory;
-import com.levelingsmp.utils.StatManager;
-import com.levelingsmp.utils.StatAbilityManager;
-import com.levelingsmp.utils.WeaponAbilityManager;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class LevelingPluginSMP extends JavaPlugin {
+public final class LevelingPluginSMP extends JavaPlugin {
 
     private static LevelingPluginSMP instance;
-    private StatManager statManager;
-    private ItemFactory itemFactory;
-    private StatAbilityManager statAbilityManager;
-    private WeaponAbilityManager weaponAbilityManager;
 
     @Override
     public void onEnable() {
         instance = this;
+
+        // Save default configs if not exist
         saveDefaultConfig();
+        saveResource("data.yml", false);
 
-        // create managers
-        statManager = new StatManager(this);
-        itemFactory = new ItemFactory(this);
-        statAbilityManager = new StatAbilityManager(this, statManager);
-        weaponAbilityManager = new WeaponAbilityManager(this);
+        // Register commands
+        getCommand("leveling").setExecutor(new commands.LevelingCommand());
+        getCommand("levelinggive").setExecutor(new commands.LevelingGiveCommand());
+        getCommand("ability1").setExecutor(new commands.Ability1Command());
+        getCommand("ability2").setExecutor(new commands.Ability2Command());
+        getCommand("ability3").setExecutor(new commands.Ability3Command());
+        getCommand("ability4").setExecutor(new commands.Ability4Command());
 
-        // load data
-        statManager.load();
+        // Register events
+        getServer().getPluginManager().registerEvents(new listeners.PlayerKillListener(), this);
+        getServer().getPluginManager().registerEvents(new listeners.StatItemUseListener(), this);
+        getServer().getPluginManager().registerEvents(new listeners.AbilityListener(), this);
 
-        // register commands
-        getCommand("leveling").setExecutor(new LevelingCommand(this, statManager, itemFactory));
-        getCommand("levelinggive").setExecutor(new LevelingGiveCommand(this, itemFactory, statManager));
-        getCommand("ability1").setExecutor(new Ability1Command(this, statAbilityManager));
-        getCommand("ability2").setExecutor(new Ability2Command(this, statAbilityManager));
-        getCommand("ability3").setExecutor(new Ability3Command(this, statAbilityManager));
-        getCommand("ability4").setExecutor(new Ability4Command(this, weaponAbilityManager));
-        getCommand("ability5").setExecutor(new Ability5Command(this, weaponAbilityManager));
-        getCommand("ability6").setExecutor(new Ability6Command(this, weaponAbilityManager));
-
-        // register events
-        getServer().getPluginManager().registerEvents(new PlayerEvents(this, statManager, itemFactory, statAbilityManager, weaponAbilityManager), this);
-        getServer().getPluginManager().registerEvents(new LevelingGUI(this, statManager, itemFactory), this);
-
-        getLogger().info("LevelingPluginSMP enabled.");
+        getLogger().info("✅ LevelingPluginSMP has been enabled!");
     }
 
     @Override
     public void onDisable() {
-        statManager.save();
-        getLogger().info("LevelingPluginSMP disabled.");
+        getLogger().info("❌ LevelingPluginSMP has been disabled!");
     }
 
     public static LevelingPluginSMP getInstance() {
         return instance;
     }
-
-    public StatManager getStatManager() { return statManager; }
-    public ItemFactory getItemFactory() { return itemFactory; }
-    public StatAbilityManager getStatAbilityManager() { return statAbilityManager; }
-    public WeaponAbilityManager getWeaponAbilityManager() { return weaponAbilityManager; }
 }
+
 
